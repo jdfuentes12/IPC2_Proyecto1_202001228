@@ -1,7 +1,11 @@
 import xml.etree.cElementTree as ET
 import os
-from Jugadores import ListaJugadores
+import webbrowser as wb
 
+from Jugadores import ListaJugadores
+from NodoJugadores import Jugadores
+
+global ListadoJugadores
 ListadoJugadores = ListaJugadores()
 
 
@@ -24,7 +28,8 @@ class Menu:
                     print()
                     Lectura()
                 if seleccion == 2:
-                    pass
+                    print()
+                    Seleccion()
                 if seleccion == 3:
                     pass
                 if seleccion == 4:
@@ -61,62 +66,79 @@ class Lectura:
         
     def jugadores(self):
         
-        ruta = input('Ingrese la ruta de su archivo: ')
+        try:
         
-        tree = ET.parse(ruta)
-        raiz = tree.getroot()
-        
-        nombre = ''
-        edad = 0
-        movimientos = 0
-        tamaño = 0
-        figura = ''
-        puzzle = []
-        solucion = []
-        
-        for dato in raiz:
-            for datos1 in dato:
-                if datos1.tag == 'datospersonales':
-                    for dato2 in datos1:
-                        if dato2.tag == 'nombre':
-                            print(dato2.text)
-                        if dato2.tag == 'edad':
-                            print(dato2.text)
-                if datos1.tag == 'movimientos':
-                    print(datos1.text)
-                if datos1.tag == 'tamaño':
-                    print(datos1.text)
-                if datos1.tag == 'figura':
-                    print(datos1.text)
-                if datos1.tag == 'puzzle':
-                    print('puzzle')
-                    for dato2 in datos1:
-                        print(int(dato2.attrib.get('f')),int(dato2.attrib.get('c')))
-                if datos1.tag == 'solucion':
-                    print('solucios')
-                    for dato2 in datos1:
-                        print(int(dato2.attrib.get('f')),int(dato2.attrib.get('c')))
+            ruta = input('Ingrese la ruta de su archivo: ')
+            tree = ET.parse(ruta)
+            raiz = tree.getroot()
+            
+            nombre = ''
+            edad = 0
+            movimientos = 0
+            tamanio = 0
+            figura = ''
+            jugador = None
+            
+            for dato in raiz:
+                for datos1 in dato:
+                    if datos1.tag == 'datospersonales':
+                        for dato2 in datos1:
+                            if dato2.tag == 'nombre':
+                                nombre = (dato2.text)
+                            if dato2.tag == 'edad':
+                                edad = int(dato2.text)
+                    if datos1.tag == 'movimientos':
+                        movimientos = int(datos1.text)
+                    if datos1.tag == 'tamaño':
+                        tamanio = int(datos1.text)
+                    if datos1.tag == 'figura':
+                        figura = datos1.text
+                        jugador = ListadoJugadores.insertarJugador(nombre,edad,movimientos,tamanio,figura)
+                    if datos1.tag == 'puzzle':
+                        for dato2 in datos1:
+                            x = int(dato2.attrib.get('f'))
+                            y = int(dato2.attrib.get('c'))
+                            jugador.puzzle.insertar(jugador.id,x,y)
+                    if datos1.tag == 'solucion':
+                        for dato2 in datos1:
+                            x = int(dato2.attrib.get('f'))
+                            y = int(dato2.attrib.get('c'))
+                            jugador.solucion.insertar(jugador.id,x,y)
+            
+            if jugador == None:
+                print('Sucedio un error en la carga de archivos.\nIntente de nuevo.')
+                Lectura()
+            elif jugador != None:
+                print('Carga de archivos con exito\n')
+                Menu()
+            
+        except:
+            print('Ruta ingresada no valida\nIntente de nuevo')
+            Menu()
         
     def premio(self):
-        ruta = input('Ingrese la ruta de su archivo: ')
-        premio = ''
-        posicion = 0
         
-        tree = ET.parse(ruta)
-        raiz = tree.getroot()
-        for dato in raiz:
-            for dato2 in dato:
-                if dato2.tag == 'lugar':
-                    posicion = int(dato2.text)
-                    print(posicion)
-                if dato2.tag == 'regalo':
-                    premio = dato2.text
-                    print(premio)
-                
+        try:
+        
+            ruta = input('Ingrese la ruta de su archivo: ')
+            premio = ''
+            posicion = 0
             
-        
+            tree = ET.parse(ruta)
+            raiz = tree.getroot()
+            for dato in raiz:
+                for dato2 in dato:
+                    if dato2.tag == 'lugar':
+                        posicion = int(dato2.text)
+                        print(posicion)
+                    if dato2.tag == 'regalo':
+                        premio = dato2.text
+                        print(premio)
+        except:
+            print('Archivo ingresado no valido\n')
+            Menu()
 
-class Salir():
+class Salir:
     def __init__(self):
         
         print("Desea salir de la aplicacion")
@@ -133,5 +155,38 @@ class Salir():
             else:
                 print("Seleccion no valida.")
                 Salir()
+
+class pruebas:
+    def __init__(self):
+        jugador = ListadoJugadores.insertarJugador('jose',21,150,15,'arbol')
+        print(jugador)
+
+class Seleccion:
+    def __init__(self):
+        try: 
+            buscar = input("Ingrese el nombre del jugador: ")
+
+            jugador = ListadoJugadores.buscar(buscar)
+            
+            if jugador == None:
+                print("No se encontro el jugador. Intente de nuevo\n")
+                Menu()
+            
+            tamano = jugador.tamaño
+            id = jugador.id
+            
+            jugador.puzzle.graficar(id,tamano)
+            print("Puzzle del jugador: ",jugador.nombre)
+            wb.open_new_tab(r'Puzzle.png')
+            
+            jugador.solucion.graficar(id,tamano)
+            print("Solucion del jugador: ",jugador.nombre)
+            wb.open_new_tab(r'Solucion.png')
+            
+            Menu()
+            
+        except:
+            print("Algo salio mal, intente de nuevo\n")
+            Menu()
 
 Menu()
