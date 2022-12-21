@@ -18,11 +18,7 @@ class ListaCeldas:
         return nuevo_Nodo
 
     def graficar(self, id,tamano):
-        
-        
-        
         archivo = open("Puzzle.dot","w",encoding="utf-8")
-        
         archivo.write('digraph G { \n')
         archivo.write('fontname="Helvetica,Arial,sans-serif"  \n')
         archivo.write('node [fontname="Helvetica,Arial,sans-serif"] \n')
@@ -43,10 +39,7 @@ class ListaCeldas:
                     else:
                         archivo.write('<TD bgcolor="black" width="30" height="30" ></TD>\n')
             archivo.write('</TR>\n')
-        
         archivo.write('</TABLE>>]; \n')
         archivo.write('}\n')
         archivo.close()
-        
-        os.system('dot -Tpng Puzzle.dot -o Puzzle.png')
-    
+        os.system('dot -Tpng Puzzle.dot -o Puzzle.pdf')

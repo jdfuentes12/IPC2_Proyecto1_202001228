@@ -1,5 +1,6 @@
 from NodoSolucion import Solucion
 import os
+import webbrowser as wb
 
 class ListaSolucion:
     def __init__(self):
@@ -45,4 +46,5 @@ class ListaSolucion:
         archivo.write('}\n')
         archivo.close()
         
-        os.system('dot -Tpng Solucion.dot -o Solucion.png')
+        os.system('dot -Tpng Solucion.dot -o Solucion.pdf')
+        
