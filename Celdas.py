@@ -39,7 +39,9 @@ class ListaCeldas:
                     else:
                         archivo.write('<TD bgcolor="black" width="30" height="30" ></TD>\n')
             archivo.write('</TR>\n')
+            
         archivo.write('</TABLE>>]; \n')
         archivo.write('}\n')
         archivo.close()
+        
         os.system('dot -Tpng Puzzle.dot -o Puzzle.pdf')

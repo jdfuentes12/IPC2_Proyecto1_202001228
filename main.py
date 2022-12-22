@@ -5,7 +5,6 @@ import webbrowser as wb
 from Jugadores import ListaJugadores
 from Regalos import ListaRegalos
 
-global ListadoJugadores
 ListadoJugadores = ListaJugadores()
 
 regalos = ListaRegalos()
@@ -13,7 +12,7 @@ regalos = ListaRegalos()
 class Menu:
     def __init__(self):
         try:
-            print("------------Manu------------")
+            print("-----------------Menu-----------------")
             print("1. Cargar el archivo XML")
             print("2. Simular con un jugador")
             print("3. Simular todos los jugadores en el sistema")
@@ -78,8 +77,11 @@ class Lectura:
             tamanio = 0
             figura = ''
             jugador = None
-            puzzle = []
-            solucion = []
+            puntos = 0
+            
+            arbol = False
+            estrella = False
+            regalo = False
             
             for dato in raiz:
                 for datos1 in dato:
@@ -91,11 +93,40 @@ class Lectura:
                                 edad = int(dato2.text)
                     if datos1.tag == 'movimientos':
                         movimientos = int(datos1.text)
+                        if movimientos < 5:
+                            puntos = 100
+                        elif movimientos > 4 and movimientos < 10:
+                            puntos = 75
+                        elif movimientos > 9 and movimientos < 15:
+                            puntos = 50
+                        elif movimientos > 14 and movimientos < 20:
+                            puntos = 25
+                        elif movimientos > 19 and movimientos < 10000:
+                            puntos = 0
+                        elif movimientos > 10000:
+                            print('Moviemientos fura de rango')
+                            break
                     if datos1.tag == 'tamaño':
                         tamanio = int(datos1.text)
+                        if (tamanio % 5) == 0 and tamanio < 31:
+                            if tamanio == 5:
+                                puntos += 25
+                            elif tamanio == 10:
+                                puntos += 50
+                            elif tamanio == 15:
+                                puntos += 75
+                            elif tamanio == 20:
+                                puntos += 100
+                            elif tamanio == 25:
+                                puntos += 150
+                            elif tamanio == 30:
+                                puntos += 200
+                        else:
+                            print('Tamaño fura de rango')
+                            break
                     if datos1.tag == 'figura':
                         figura = datos1.text
-                        jugador = ListadoJugadores.insertarJugador(nombre,edad,movimientos,tamanio,figura)
+                        jugador = ListadoJugadores.insertarJugador(nombre,edad,movimientos,tamanio,figura,puntos)
                     if datos1.tag == 'puzzle':
                         for dato3 in datos1:
                             x = int(dato3.attrib.get('f'))
@@ -106,15 +137,7 @@ class Lectura:
                             x = int(dato4.attrib.get('f'))
                             y = int(dato4.attrib.get('c'))
                             jugador.solucion.insertar(jugador.id,x,y)
-                            
-                #if len(puzzle) != 0 and len(solucion) != 0:
-                #    contador = 0
-                #    for i in range(tamanio):
-                #        for j in range(tamanio):
-                #            
-                #            #jugador.solucion.insertar(jugador.id,puzzle[i],solucion[i])
-                #            print()
-            
+                    
             if jugador == None:
                 print('Sucedio un error en la carga de archivos.\nIntente de nuevo.')
                 
@@ -176,9 +199,10 @@ class Salir:
 class Seleccion:
     def __init__(self):
         try: 
-            buscar = input("Ingrese el nombre del jugador: ")
+            print("Se realizara la simulacion del un jugador\n")
 
-            jugador = ListadoJugadores.buscar(buscar)
+            #jugador = ListadoJugadores.buscar(buscar)
+            jugador = ListadoJugadores.cabecera()
             
             if jugador == None:
                 print("No se encontro el jugador. Intente de nuevo\n")

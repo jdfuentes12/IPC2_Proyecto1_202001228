@@ -1,0 +1,17 @@
+digraph G {
+fontname="Helvetica,Arial,sans-serif"
+graph [
+rankdir = "LR"
+bgcolor = "white:lightblue"
+style="filled"
+gradientangle = 270];
+
+"1"[
+label = "<f0>nombre: Roberto|edad: 20|figura: arbol|puntos: 50" 
+shape = "record"
+fillcolor = "brown:yellow"
+gradientangle = 100
+];
+"Jugadores":f1 -> "1":f0 [
+];
+}
