@@ -219,10 +219,14 @@ class Seleccion:
             print("Solucion del jugador: ",jugador.nombre)
             wb.open_new_tab(r'Solucion.pdf')
             
+            ListadoJugadores.eliminar()
             Menu()
             
         except:
             print("Algo salio mal, intente de nuevo\n")
             Menu()
 
+class Top:
+    def __init__(self):
+        pass
 Menu()

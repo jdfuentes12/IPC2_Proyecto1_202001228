@@ -51,6 +51,29 @@ class ListaJugadores:
             self.heard = tmp.siguiente
             self.size -= 1
     
+    def top(self):
+        ultimo = None
+        while ultimo != self.primero.siguiente:
+            comp1 = comp2 = self.primero
+
+            while comp2.siguiente != ultimo:
+                temp = comp2.siguiente
+
+                if comp2.puntos < temp.puntos:
+                    comp2.siguiente = temp.siguiente
+                    temp.siguiente=comp2
+
+                    if comp2 != self.primero:
+                        comp1.siguiente = temp
+                    else:
+                        self.primero = temp
+                    comp2,temp = temp,comp2
+
+                comp1 = comp2
+                comp2 = comp2.siguiente
+            ultimo=comp2
+    
+    
     def graficar(self):
         tmp = self.heard
         contador = 1

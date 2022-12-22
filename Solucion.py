@@ -46,5 +46,5 @@ class ListaSolucion:
         archivo.write('}\n')
         archivo.close()
         
-        os.system('dot -Tpng Solucion.dot -o Solucion.pdf')
+        os.system('dot -Tpdf Solucion.dot -o Solucion.pdf')
         

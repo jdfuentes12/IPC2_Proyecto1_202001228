@@ -44,4 +44,4 @@ class ListaCeldas:
         archivo.write('}\n')
         archivo.close()
         
-        os.system('dot -Tpng Puzzle.dot -o Puzzle.pdf')
+        os.system('dot -Tpdf Puzzle.dot -o Puzzle.pdf')
